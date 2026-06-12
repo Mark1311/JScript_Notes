@@ -1,6 +1,82 @@
-# JavaScript
+# What is JavaScript?
+JavaScript ek high-level, interpreted (ya JIT-compiled), aur single-threaded programming language hai, jise main web pages ko dynamic aur interactive banane ke liye use kiya jata hai. Yeh Client-side aur Server-side (Node.js ke zariye) dono jagah kaam karti hai.
 
-### strict mode
+### Key Technical Terms
+
+- Single-threaded & Synchronous: JavaScript ek waqt me sirf ek hi kaam kar sakti hai (line by line chalti hai).
+- Asynchronous Capabilities: Single-threaded hone ke bawajood, JS Callbacks, Promises, aur Async/Await ki madad se heavy tasks (jaise API se data lana) ko background me chala sakti hai bina browser ko freeze kiye.
+- Dynamically Typed: Isme aapko variable ka data type (int, string, etc.) pehle se declare nahi karna padta. let x = 10; likha, toh yeh khud samajh jayegi ki yeh number hai.
+- Multi-paradigm: Yeh Object-Oriented (OOPs) aur Functional programming dono ko support karti hai.
+
+### How JavaScript Works?
+
+- JS Engine: Har browser ke paas ek engine hota hai jo JS code ko machine code me badalta hai. Chrome ke paas V8 Engine hai (jo Node.js me bhi use hota hai) aur Firefox ke paas SpiderMonkey hai.
+
+- Execution Context: Jab bhi JS ka code chalta hai, wo ek "Execution Context" ke andar chalta hai. Iske do phase hote hain:
+
+  1. Memory Creation Phase: Saare variables aur functions ko memory allocate hoti hai (Isi waqt Hoisting hoti hai).
+  2. Code Execution Phase: Code line-by-line execute hota hai.
+
+# How JS Work?
+
+### 1. JavaScript Engine (The Core)
+Har browser ke paas ek JS Engine hota hai (jaise Chrome ka V8, Firefox ka SpiderMonkey). Engine ka kaam aapke code ko machine code (0s aur 1s) me badalna hai.
+
+- Parsing: Aapka code line-by-line padha jata hai aur use Abstract Syntax Tree (AST) me convert kiya jata hai (jo ki ek tree-like structure hota hai).
+
+- Compilation (JIT - Just In Time): JavaScript pehle sirf interpreted (line-by-line chalne wali) language thi, lekin ab yeh JIT Compilation use karti hai. Isme code ko pehle jaldi se machine code me convert (compile) kiya jata hai aur saath hi saath run (execute) kiya jata hai taaki speed behtareen ho.
+
+- Execution: Code ko execute karne ke liye engine ke paas do main components hote hain:
+
+  - Memory Heap: Jahan saare variables, objects, aur functions ko memory milti hai (raw space).
+
+  - Call Stack: Jahan aapka code actually execute hota hai. Yeh LIFO (Last In, First Out) principle par kaam karta hai. Jo function call hoga, wo stack ke upar aayega, aur khatam hote hi bahar nikal jayega.
+
+### 2. Execution Context (Code Kaise Chalta Hai)
+Jab bhi JS code run hota hai, toh ek Global Execution Context (GEC) banta hai. Yeh do phases me kaam karta hai:
+
+#### Phase 1: Memory Creation Phase (Creation Phase)
+Code chalne se pehle, JS Engine saare variables aur functions ko scan karta hai aur unhe memory allocate karta hai.
+  - Variables (var) ko shuruat me undefined value milti hai.
+  - Functions ka poora ka poora code memory me copy ho jata hai. (Isi phase ko hum Hoisting kehte hain).
+
+#### Phase 2: Code Execution Phase
+Ab code line-by-line chalna shuru hota hai. Variables ko unki actual value milti hai. Agar koi function call (()) aata hai, toh us function ke liye ek naya Functional Execution Context banta hai aur wo Call Stack me chala jata hai. Function khatam hote hi wo stack se delete ho jata hai.
+
+### 3. Asynchronous JS aur JavaScript Runtime
+Aapko pata hai ki JS Single-threaded hai (ek waqt me ek hi line chalayegi). Toh fir setTimeout ya API calls jaise asynchronous kaam bina browser ko block kiye kaise hote hain?
+
+- Call Stack: Yeh toh engine ka hissa hai jo aapka normal code chala raha hai.
+
+- Web APIs (Browser ka hissa): Jab aap setTimeout, fetch() (API call), ya DOM click events use karte hain, toh JS Engine unhe khud handle nahi karta. Wo unhe Browser ki Web APIs ko सौंप (handover) deta hai.
+
+- Callback Queue (ya Task Queue): Jab Web API apna kaam poora kar leti hai (jaise 3 seconds poore ho gaye ya API se data aa gaya), toh wo uske callback function ko Callback Queue me bhej deti hai.
+
+- Event Loop (The Supervisor): Event Loop ka sirf ek hi kaam hai—wo lagatar Call Stack aur Callback Queue ko dekhta rehta hai.
+
+  - Agar Call Stack khali (empty) hai, aur Callback Queue me koi kaam bacha hai...
+  - Toh Event Loop Queue se function ko uthakar Call Stack me daal deta hai, aur wo execute ho jata hai.
+
+Flow:
+
+```text
+JavaScript Code
+      ↓
+Parser
+      ↓
+AST (Abstract Syntax Tree)
+      ↓
+Compilation
+      ↓
+Machine Code
+      ↓
+Execution
+```
+
+### Summery:-
+JS internally V8 Engine aur Browser Runtime ke combination se chalti hai. Engine ke andar ek Call Stack hota hai jahan execution context ke zariye code line-by-line chalta hai. Kyunki JS single-threaded hai, asynchronous tasks ko handle karne ke liye Web APIs ka use hota hai. Jab asynchronous task poora hota hai, toh wo Callback Queue me jata hai, aur Event Loop stack khali hote hi us task ko execute karne ke liye Call Stack me bhej deta hai
+
+# strict mode
 
 Strict mode ek tarah ka coding mode hota hai jo JavaScript me kuch errors ko zyada strict bana deta hai, jisse code safe aur predictable ban jata hai. Agar aap "strict mode" use karte hain, to kuch cheezein jo pehle JavaScript me allowed thi, unhe ab error dikha kar rok diya jata hai.
 Ye ek tarah se code ko secure aur error-free banane me madad karta hai.
@@ -156,6 +232,17 @@ Summery:---> Functional hosting ka matlab hai function declarations ka apne scop
 #### Functional Hosting Ka Kaise Kaam Karta Hai?
 Jab aap function declaration likhte hain, JavaScript engine us function ke definition ko hosting karta hai. Iska matlab hai ki aap function ko declare hone se pehle bhi call kar sakte hain
 
+# Diff b/w Let, Var and Const???
+
+| Feature / Criteria | `var` | `let` | `const` |
+| :--- | :--- | :--- | :--- |
+| **Scope** | **Function Scoped** (Agar function ke bahar hai toh Global Scoped hota hai). | **Block Scoped** (Sirf `{}` curly braces ke andar hi access ho sakta hai). | **Block Scoped** (Sirf `{}` curly braces ke andar hi access ho sakta hai). |
+| **Re-declaration** | **Allowed** (Aap ek hi naam ka variable dobara declare kar sakte hain). | **Not Allowed** (Ek hi scope me same naam ka variable dobara declare nahi ho sakta). | **Not Allowed** (Ek hi scope me same naam ka variable dobara declare nahi ho sakta). |
+| **Re-assignment** | **Allowed** (Aap variable ki value baad me badal sakte hain). | **Allowed** (Aap variable ki value baad me badal sakte hain). | **Not Allowed** (Iske sath mili value fix hoti hai, badli nahi ja sakti). |
+| **Hoisting** | **Hoisted with `undefined`** (Execution se pehle memory me `undefined` set ho jata hai). | **Hoisted in TDZ** (Hoist hota hai, lekin "Temporal Dead Zone" me rehta hai, access karne par error aayega). | **Hoisted in TDZ** (Hoist hota hai, lekin "Temporal Dead Zone" me rehta hai, access karne par error aayega). |
+| **Global Object Binding** | **Yes** (Browser me yeh `window` object ka hissa ban jata hai). | **No** (Yeh global object ya `window` me attach nahi hota). | **No** (Yeh global object ya `window` me attach nahi hota). |
+| **Initialization** | Optional (Aap sirf `var a;` likh kar chhor sakte hain). | Optional (Aap sirf `let b;` likh kar chhor sakte hain). | **Mandatory** (Declare karte waqt hi value dena zaroori hai, jaise `const c = 10;`). |
+
 # Nested Terrnery Operaters/Functions
 
 
@@ -199,9 +286,11 @@ console.log(a) => 4
 console.log(b) => 5
 ```
 
-# Closure 
+# what is Closure ?
 
 Closure tab hota hai jab ek function apne outer function ki variables ko access karta hai, even jab outer function execute ho chuka hota hai.
+
+Closure ka matlab hai jab ek function ke andar dusra function banta hai, toh andar wala function apne bahar wale function ke variables ko yaad rakhta hai. Jab bahar wala function execute hokar khatam bhi ho jata hai aur call stack se hat jata hai, tab bhi andar wala function un variables ko bhoolta nahi hai kyunki wo ek lexical environment (scope chain) ko hold karke rakhta hai.
 
 #### Closure ka basic structure:- 
 
@@ -1724,13 +1813,14 @@ async function executeTasks() {
 
 JavaScript mein Promise ek object hota hai jo asynchronously kaam karta hai, yani ki ek future value ko represent karta hai jo abhi available nahi hai lekin future mein milne wali hai.
 
+JavaScript me Promise ek object hai jo kisi Asynchronous operation ke eventual completion (safalta) ya failure (asafalta) aur uski resulting value ko represent karta hai
+
+
 Promise ka basic concept yeh hai:-
 
-Pending: Jab promise abhi resolve ya reject nahi hota, tab wo pending state mein hota hai.
-
-Resolved (Fulfilled): Jab promise successfully complete ho jata hai, to wo resolved state mein chala jata hai.
-
-Rejected: Agar promise kisi error ya failure ki wajah se fail ho jata hai, to wo rejected state mein chala jata hai.
+- Pending: Jab promise abhi resolve ya reject nahi hota, tab wo pending state mein hota hai.
+- Resolved (Fulfilled): Jab promise successfully complete ho jata hai, to wo resolved state mein chala jata hai.
+- Rejected: Agar promise kisi error ya failure ki wajah se fail ho jata hai, to wo rejected state mein chala jata hai.
 
 
 ```python
@@ -1869,11 +1959,11 @@ A self-invoked function in JavaScript, also known as an Immediately Invoked Func
 })();
 ```
 
-# event bubbling
+# Event bubbling
 
 JavaScript me event bubbling ek event propagation mechanism hai jisme event sabse pehle child element pe trigger hota hai aur phir parent elements ki taraf propagate (bubble) karta hai. Iska matlab hai ki jab koi event (jaise click, mouseover, etc.) kisi element par hota hai, to wo pehle us element ko handle karega, phir us element ke parent ko, phir uske parent ko, aur aise hi ye parent elements ki chain me upar ki taraf jaata hai, jab tak ki DOM tree ke root element tak nahi pahuch jata.
 
-# Event Bubbling ka Example
+### Event Bubbling ka Example
 
 Maan lijiye, ek {button} element hai jo ek {div} element ke andar hai. Agar dono par click event listeners hain, to jab aap {button} ko click karenge, pehle wo button ka click event trigger hoga, phir wo event {div} ke click listener ko bhi trigger karega (agar uspar bhi event listener set ho).
 
@@ -1970,76 +2060,112 @@ Event Bubbling: Click event li element se parent element ul tak bubble karta hai
 
 Event Target Matching: Hum event.target ka use karte hain, jo bataata hai ki event kis specific element pe hua. Hum event.target.matches('li.list-item') se ensure karte hain ki event sirf li element pe trigger ho raha ho.
 
-# Event bubbling
 
-Event bubbling JavaScript me ek concept hai jisme ek event (jaise click, keypress, etc.) ek child element se parent element tak propagate hota hai. Iska matlab hai ke jab koi event kisi child element par trigger hota hai, to wo parent elements ko bhi notify karta hai, jab tak wo root element tak na pahuch jaye.
 
-Yeh process is tarah kaam karta hai:
+##### Stop Event Bubbling
+Agar aapko event bubbling ko rokhna hai, to aap event.stopPropagation() method ka use kar sakte ho.
 
-Jab koi event child element par hota hai (jaise ek button par click), wo sabse pehle us child element par execute hota hai.
 
-Phir event parent element (jaise div, body, etc.) par propagate hota hai aur wahan bhi execute hota hai.
-
-Yeh process parent element se root tak chalti rehti hai.
 
 
 ```python
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Bubbling Example</title>
-</head>
-<body>
-  <div id="parent" style="padding: 20px; background-color: lightblue;">
-    <button id="child">Click Me</button>
+document.getElementById("parent").addEventListener("click", () => {
+  console.log("Parent clicked");
+});
+
+document.getElementById("child").addEventListener("click", (event) => {
+  event.stopPropagation(); // Stop event bubbling
+  console.log("Child clicked");
+});
+
+// Output
+// Child clicked
+```
+
+1. Advantages of Event Bubbling
+* Single Event Listener:
+
+Parent element par ek hi listener lagakar multiple child elements ke events handle karna.
+
+* Better Performance:
+
+Har child element ke liye alag listener lagane ki zarurat nahi hoti.
+
+* Dynamic Elements:
+
+Aise child elements ko handle karna jo runtime par DOM me add hote hain.
+
+2. Disadvantages of Event Bubbling
+* Unintended Behavior:
+
+Agar bubbling control nahi kiya gaya, to irrelevant elements par bhi events trigger ho sakte hain.
+
+* Stop Propagation Logic:
+
+Har event ke liye propagation stop karne ka logic likhna padta hai.
+
+| **Aspect**           | **Event Bubbling**                            | **Event Capturing**                                           |
+| -------------------- | --------------------------------------------- | ------------------------------------------------------------- |
+| **Order**            | Event child se parent tak propagate hota hai. | Event parent se child tak propagate hota hai.                 |
+| **Default Behavior** | JavaScript me default behavior hai.           | Event listener explicitly capturing mode me lagana padta hai. |
+| **Use Case**         | Most common scenarios me use hota hai.        | Rarely use hota hai, especially in nested elements.           |
+
+
+# What is event capturing
+
+Event Capturing (jo trickling phase ke naam se bhi jana jata hai) ek DOM event propagation mechanism hai. Isme event sabse pehle parent element se start hota hai aur step-by-step child element tak propagate karta hai.
+
+#### Event Capturing Kaise Kaam Karta Hai?
+Jab ek event trigger hota hai (e.g., click), to wo pehle outermost parent element par fire hota hai.
+
+Uske baad wo progressively inner elements (child elements) par propagate karta hai.
+
+Ye propagation ke process ko capturing phase kehte hain
+
+Event Capturing Ka Syntax:-
+
+Capturing phase ke liye, addEventListener method ka third argument true set karte hain.
+
+
+```python
+element.addEventListener("event", callback, true);
+```
+
+
+```python
+<div id="parent" style="padding: 20px; background-color: lightblue;">
+  Parent
+  <div id="child" style="padding: 20px; background-color: lightgreen;">
+    Child
   </div>
-
-  <script>
-    // Parent element par event listener
-    document.getElementById('parent').addEventListener('click', function() {
-      alert('Parent clicked');
-    });
-
-    // Child element par event listener
-    document.getElementById('child').addEventListener('click', function(event) {
-      alert('Child clicked');
-      // Event ko stop karne ke liye
-      event.stopPropagation(); // Agar yeh line remove kar den, to bubbling continue rahegi
-    });
-  </script>
-</body>
-</html>
-
-```
-
-Is example mein kya ho raha hai:
-
-Agar aap "Click Me" button par click karte hain, to pehle child element (button) ka click event trigger hota hai aur Child clicked ka alert dikhai deta hai.
-
-Phir, agar event.stopPropagation() remove kar diya jaye to, event bubbling continue hoga aur parent element ka event listener bhi trigger hoga, aur Parent clicked ka alert dikhega.
-
-Event Bubbling ko rokna:
-
-Agar aap nahi chahte ke event parent elements tak propagate ho, to aap event.stopPropagation() ka use kar sakte hain, jo event ko bubble hone se rok dega.
-
-
-```python
-
+</div>
 ```
 
 
 ```python
+document.getElementById("parent").addEventListener(
+  "click",
+  () => {
+    console.log("Parent clicked");
+  },
+  true // Enabling capturing phase
+);
 
+document.getElementById("child").addEventListener(
+  "click",
+  () => {
+    console.log("Child clicked");
+  },
+  true // Enabling capturing phase
+);
+
+// Output
+// Parent clicked
+// Child clicked
 ```
 
-
-```python
-
-```
-
-
-```python
-
-```
+| **Aspect**        | **Event Capturing**                           | **Event Bubbling**                            |
+| ----------------- | --------------------------------------------- | --------------------------------------------- |
+| **Order**         | Event parent se child tak propagate hota hai. | Event child se parent tak propagate hota hai. |
+| **How to Enable** | `addEventListener` me third argument `true`.  | Default behavior, third argument `false`.     |
+| **Use Case**      | Rarely used, specific scenarios me.           | Commonly used in most cases.                  |

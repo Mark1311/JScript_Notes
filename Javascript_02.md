@@ -2,11 +2,7 @@
 
 #### Null:
 
-* Null ek intentional value hoti hai, jo dikhata hai ki kisi variable ki value khaali hai.
-
-* Ye developer ke dwara manually assign hoti hai.
-
-* Null ek object type hota hai.
+null ek aisi value hai jise programmer khud jaanbhoojh kar kisi variable me assign karta hai yeh dikhane ke liye ki "yeh variable abhi khali hai".
 
 
 ```python
@@ -16,14 +12,7 @@ console.log(x); // null
 
 #### Undefined:
 
-* Undefined ka matlab hai ki variable declare toh kiya gaya hai, lekin usme koi value assign nahi hui.
-
-* Ye JavaScript ke dwara automatically diya jata hai agar variable ki value na ho.
-
-* Undefined ek undefined type hota hai.
-
-
-
+Jab aap koi variable bana dete ho (declare kar dete ho) lekin usko koi value nahi dete, to JavaScript usko automatic undefined value de deta hai.
 
 ```python
 let y;
@@ -36,11 +25,17 @@ Null: "Khaali value", jo developer assign karta hai.
 Undefined: "Value nahi hai", jo JavaScript assign karta hai.
 
 
-```python
+```js
 let a = null;       // Developer ne khaali kiya
 let b;              // Value assign nahi hui
 console.log(a);     // null
 console.log(b);     // undefined
+```
+```js
+//important
+
+console.log(typeof undefined); // Output: "undefined"
+console.log(typeof null);      // Output: "object" 😲
 ```
 
 # What is the event loop in JavaScript?
@@ -759,185 +754,7 @@ Temporal Dead Zone (TDZ) ek JavaScript mechanism hai jo developers ko predictabl
 | **I**      | Interface Segregation Principle (ISP) | Classes should not be forced to implement methods they do not use.                              | Design interfaces specific to client needs.          |
 | **D**      | Dependency Inversion Principle (DIP)  | High-level modules should not depend on low-level modules but on abstractions.                  | Decouple high-level and low-level logic.             |
 
-
-# What is event delegation in JavaScript?
-
-Event Delegation ek technique hai jisme hum ek parent element par event listener attach karte hain, aur uske child elements par hone wale events ko handle karte hain.
-
-Ye concept event bubbling ka use karta hai, jisme event sabse niche ke element (target element) se bubble hokar uske ancestors tak propagate hota hai.
-
-
-```python
-// Example With Event Delegation
-
-document.getElementById("parent").addEventListener("click", (event) => {
-  if (event.target.tagName === "BUTTON") {
-    console.log(`${event.target.textContent} clicked`);
-  }
-});
-```
-
-
-```python
-<div id="parent">
-  <button id="button1">Button 1</button>
-  <button id="button2">Button 2</button>
-</div>
-```
-
-Explanation:
-* Parent element (#parent) par event listener lagaya gaya hai.
-* event.target ka use karke identify kiya gaya ki kaunsa button click hua.
-* Agar dynamically naya button add karenge, wo bhi handle ho jayega.
-
-# What is event bubbling
-
-1. Event Bubbling in JavaScript
-* Event Bubbling ek concept hai JavaScript me jo tab hota hai jab ek DOM element par event trigger hota hai aur wo event parent elements tak propagate karta hai.
-
-2. Kaise Kaam Karta Hai?
-* Jab ek child element par event trigger hota hai (e.g., click), to wo sabse pehle child element par handle hota hai.
-* Uske baad wo parent element, phir uske ancestor elements tak propagate hota hai.
-* Ye process document element tak ja sakta hai, jab tak propagation ko explicitly stop na kiya jaye.
-
-
-```python
-<div id="parent" style="padding: 20px; background-color: lightblue;">
-  Parent
-  <div id="child" style="padding: 20px; background-color: lightgreen;">
-    Child
-  </div>
-</div>
-```
-
-
-```python
-document.getElementById("parent").addEventListener("click", () => {
-  console.log("Parent clicked");
-});
-
-document.getElementById("child").addEventListener("click", () => {
-  console.log("Child clicked");
-});
-
-
-// OUTPUT
-// Child clicked
-// Parent clicked
-
-```
-
-##### Stop Event Bubbling
-Agar aapko event bubbling ko rokhna hai, to aap event.stopPropagation() method ka use kar sakte ho.
-
-
-
-
-```python
-document.getElementById("parent").addEventListener("click", () => {
-  console.log("Parent clicked");
-});
-
-document.getElementById("child").addEventListener("click", (event) => {
-  event.stopPropagation(); // Stop event bubbling
-  console.log("Child clicked");
-});
-
-// Output
-// Child clicked
-```
-
-1. Advantages of Event Bubbling
-* Single Event Listener:
-
-Parent element par ek hi listener lagakar multiple child elements ke events handle karna.
-
-* Better Performance:
-
-Har child element ke liye alag listener lagane ki zarurat nahi hoti.
-
-* Dynamic Elements:
-
-Aise child elements ko handle karna jo runtime par DOM me add hote hain.
-
-2. Disadvantages of Event Bubbling
-* Unintended Behavior:
-
-Agar bubbling control nahi kiya gaya, to irrelevant elements par bhi events trigger ho sakte hain.
-
-* Stop Propagation Logic:
-
-Har event ke liye propagation stop karne ka logic likhna padta hai.
-
-| **Aspect**           | **Event Bubbling**                            | **Event Capturing**                                           |
-| -------------------- | --------------------------------------------- | ------------------------------------------------------------- |
-| **Order**            | Event child se parent tak propagate hota hai. | Event parent se child tak propagate hota hai.                 |
-| **Default Behavior** | JavaScript me default behavior hai.           | Event listener explicitly capturing mode me lagana padta hai. |
-| **Use Case**         | Most common scenarios me use hota hai.        | Rarely use hota hai, especially in nested elements.           |
-
-
-# What is event capturing
-
-Event Capturing (jo trickling phase ke naam se bhi jana jata hai) ek DOM event propagation mechanism hai. Isme event sabse pehle parent element se start hota hai aur step-by-step child element tak propagate karta hai.
-
-#### Event Capturing Kaise Kaam Karta Hai?
-Jab ek event trigger hota hai (e.g., click), to wo pehle outermost parent element par fire hota hai.
-
-Uske baad wo progressively inner elements (child elements) par propagate karta hai.
-
-Ye propagation ke process ko capturing phase kehte hain
-
-Event Capturing Ka Syntax:-
-
-Capturing phase ke liye, addEventListener method ka third argument true set karte hain.
-
-
-```python
-element.addEventListener("event", callback, true);
-```
-
-
-```python
-<div id="parent" style="padding: 20px; background-color: lightblue;">
-  Parent
-  <div id="child" style="padding: 20px; background-color: lightgreen;">
-    Child
-  </div>
-</div>
-```
-
-
-```python
-document.getElementById("parent").addEventListener(
-  "click",
-  () => {
-    console.log("Parent clicked");
-  },
-  true // Enabling capturing phase
-);
-
-document.getElementById("child").addEventListener(
-  "click",
-  () => {
-    console.log("Child clicked");
-  },
-  true // Enabling capturing phase
-);
-
-// Output
-// Parent clicked
-// Child clicked
-```
-
-| **Aspect**        | **Event Capturing**                           | **Event Bubbling**                            |
-| ----------------- | --------------------------------------------- | --------------------------------------------- |
-| **Order**         | Event parent se child tak propagate hota hai. | Event child se parent tak propagate hota hai. |
-| **How to Enable** | `addEventListener` me third argument `true`.  | Default behavior, third argument `false`.     |
-| **Use Case**      | Rarely used, specific scenarios me.           | Commonly used in most cases.                  |
-
-
 # What is the difference between async and defer attributes on <​script> tags?
-
 
 1. Default Behavior (Without async or defer)
 
@@ -947,7 +764,29 @@ document.getElementById("child").addEventListener(
 
 * Is process ke dauraan HTML parsing temporarily block ho jata hai.
 
+Browser Flow:
+
+```text
+HTML Parsing
+    ↓
+Script Download
+    ↓
+Script Execute
+    ↓
+HTML Parsing Continue
+```
+
 2. async Attribute
+
+```text
+HTML Parsing
+      ↓
+Script Download (Parallel)
+      ↓
+Script Ready Hote Hi Execute
+      ↓
+HTML Parsing Continue
+```
 * Behavior:
 
 JavaScript ko asynchronously download karta hai, lekin uska execution immediate hota hai (jese hi script download ho jaye).
@@ -958,11 +797,20 @@ Execution Order:
 Scripts ka execution download completion ke order par hota hai, HTML ke parsing se pehle.
 
 
-
 3. defer Attribute
 * Behavior:
 
 JavaScript ko asynchronously download karta hai, lekin uska execution tab tak delay hota hai jab tak HTML parsing complete na ho jaye.
+
+```text
+HTML Parsing
+      ↓
+Script Download (Parallel)
+      ↓
+HTML Parsing Complete
+      ↓
+Script Execute
+```
 
 * Execution Order:
 
@@ -978,6 +826,7 @@ Scripts document me appear hone ke order me execute hote hain (irrespective of d
 
 
 #### Best Practices for Using async and defer
+
 1. Use async for Non-Critical Scripts:
 
 * Analytics scripts, third-party widgets, or ads scripts ke liye best hai jo DOM ya doosre scripts par depend nahi karte.
@@ -1169,8 +1018,6 @@ Key Points:
 
 Example Use Case:
 * Infinite Scroll: Jab user continuously scroll karta hai, to content load karne ke liye throttling use hota hai.
-
-
 
 
 ```python
